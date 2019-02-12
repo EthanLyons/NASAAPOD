@@ -5,6 +5,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
@@ -32,6 +34,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity {
 
   private static final String DATE_FORMAT = "yyyy-MM-dd";
+  private static final String CALENDAR_KEY = "calender_ms";
+  private static final String APOD_KEY = "apod";
+
 
   private WebView webView;
   private String apiKey;
@@ -48,7 +53,41 @@ public class MainActivity extends AppCompatActivity {
     setupDatePicker();
     setupService();
     calendar = Calendar.getInstance();
-    new ApodTask().execute(new Date()); // TODO Deal with time zones.
+    if (savedInstanceState != null) {
+      long savedMillis = savedInstanceState.getLong(CALENDAR_KEY, calendar.getTimeInMillis());
+      calendar.setTimeInMillis(savedMillis);
+      apod = (Apod) savedInstanceState.getSerializable(APOD_KEY);
+    }
+    if (apod != null) {
+      webView.loadUrl(apod.getUrl());
+      loading.setVisibility(View.VISIBLE);
+    } else {
+      new ApodTask().execute(new Date()); // TODO Deal with time zones.
+    }
+  }
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    super.onCreateOptionsMenu(menu);
+    getMenuInflater().inflate(R.menu.options, menu);
+    return true;
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    if (item.getItemId() == R.id.info)  {
+      showInfo();
+    return true;
+  } else {
+    return super.onOptionsItemSelected(item);
+  }
+}
+
+  @Override
+  protected void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+    outState.putLong(CALENDAR_KEY, calendar.getTimeInMillis());
+    outState.putSerializable(APOD_KEY);
   }
 
   @SuppressLint("SetJavaScriptEnabled")
@@ -64,9 +103,7 @@ public class MainActivity extends AppCompatActivity {
       @Override
       public void onPageFinished(WebView view, String url) {
         loading.setVisibility(View.GONE);
-        if (apod != null) {
-          Toast.makeText(MainActivity.this, apod.getTitle(), Toast.LENGTH_LONG).show();
-        }
+        showInfo();
       }
     });
     WebSettings settings = webView.getSettings();
@@ -76,6 +113,12 @@ public class MainActivity extends AppCompatActivity {
     settings.setDisplayZoomControls(false);
     settings.setUseWideViewPort(true);
     settings.setLoadWithOverviewMode(true);
+  }
+
+  private void showInfo() {
+    if (apod != null) {
+      Toast.makeText(MainActivity.this, apod.getTitle(), Toast.LENGTH_LONG).show();
+    }
   }
 
   private void setupDatePicker()  {

@@ -2,9 +2,12 @@ package com.bignerdranch.android.nasaapod.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import java.io.Serializable;
 import java.util.Date;
 
-public class Apod {
+public class Apod implements Serializable {
+
+
 
   @Expose
   private Date date;
