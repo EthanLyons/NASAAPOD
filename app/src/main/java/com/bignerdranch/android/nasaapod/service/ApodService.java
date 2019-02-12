@@ -1,4 +1,4 @@
-package com.bignerdranch.android.nasaapod;
+package com.bignerdranch.android.nasaapod.service;
 
 import com.bignerdranch.android.nasaapod.model.Apod;
 import retrofit2.Call;

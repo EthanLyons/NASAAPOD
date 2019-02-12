@@ -1,34 +1,35 @@
 package com.bignerdranch.android.nasaapod.model;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import java.util.Date;
 
 public class Apod {
 
-  @expose
+  @Expose
   private Date date;
 
-  @expose
+  @Expose
   private String title;
 
-  @expose
+  @Expose
   private String explanation;
 
-  @expose
+  @Expose
   private String copyright;
 
-  @expose
+  @Expose
   private String url;
 
-  @expose
+  @Expose
   @SerializedName("media_type")
   private String mediaType;
 
-  @expose
+  @Expose
   @SerializedName("hdurl")
   private String hdUrl;
 
-  @expose
+  @Expose
   @SerializedName("service_version")
   private String serviceVersion;
 
