@@ -8,7 +8,7 @@ import java.util.Date;
 public class Apod implements Serializable {
 
 
-
+  private static final long serialVersionUID = -4783948268540337334L;
   @Expose
   private Date date;
 

@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
     outState.putLong(CALENDAR_KEY, calendar.getTimeInMillis());
-    outState.putSerializable(APOD_KEY);
+    outState.putSerializable(APOD_KEY, apod);
   }
 
   @SuppressLint("SetJavaScriptEnabled")
@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
         .setDateFormat(DATE_FORMAT)
         .create();
     Retrofit retrofit = new Retrofit.Builder()
-        .baseUrl(getString(R.string.base_url))
+        .baseUrl("https://api.nasa.gov")
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build();
     service = retrofit.create(ApodService.class);
